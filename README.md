@@ -1,12 +1,24 @@
+Certainly! Here's an updated version of your stack description with **Oak Middleware** given its own dedicated section:
+
+---
+
 # Deno + Postgres + Supabase + React + Vite + Redux + RTK Query + Material UI + OpenAI App
 
-This app combines powerful, modern technologies to create a fast, scalable, and responsive web application. The backend is powered by **Deno**, with **Postgres** as the database and **Supabase** for backend-as-a-service (BaaS). On the frontend, we use **React** for building dynamic user interfaces, **Vite** for fast build times, **Redux** and **RTK Query** for state management and API handling, **Material UI** for beautifully designed components, and **OpenAI** for advanced AI-driven capabilities.
+This app combines powerful, modern technologies to create a fast, scalable, and responsive web application. The backend is powered by **Deno**, with **Postgres** as the database, **Supabase** for backend-as-a-service (BaaS), and **Oak** middleware for handling HTTP requests. On the frontend, we use **React** for building dynamic user interfaces, **Vite** for fast build times, **Redux** and **RTK Query** for state management and API handling, **Material UI** for beautifully designed components, and **OpenAI** for advanced AI-driven capabilities.
 
 ## 🚀 Technologies Overview
 
 ### 🔥 **Deno (Backend)**
 
 [Deno](https://deno.land) is a modern runtime for JavaScript and TypeScript, built with security in mind. Unlike Node.js, Deno does not use `npm` and instead uses imports from URLs or local files. It's designed to be secure by default, with the ability to grant explicit permissions for file, network, and environment access. Deno is fast, lightweight, and great for building high-performance server-side applications.
+
+### 🌐 **Oak Middleware (HTTP Request Handling)**
+
+[Oak](https://deno.land/x/oak) is a powerful middleware framework for Deno, designed to make building web servers and APIs easy and efficient. Oak provides a wide range of features, including robust routing, middleware support, and request/response handling, making it an excellent choice for Deno-based applications. This app uses Oak to manage HTTP requests, ensuring high performance and scalability for the backend.
+
+- **Routing**: Oak provides simple and flexible routing to map HTTP requests to handlers.
+- **Middleware**: Oak allows the use of middleware for request logging, security, authentication, and more.
+- **Efficient Request Handling**: Oak is optimized for Deno's runtime, providing fast and secure HTTP request processing.
 
 ### 🗄️ **Postgres (Database)**
 
@@ -36,9 +48,12 @@ This app combines powerful, modern technologies to create a fast, scalable, and 
 
 [OpenAI](https://openai.com) powers advanced AI features within the app, enabling intelligent, context-aware responses, natural language processing, and other cutting-edge AI-driven capabilities. By leveraging OpenAI’s API, this app can provide functionalities such as content generation, chatbots, and smart recommendations, creating an interactive and highly personalized user experience.
 
-## 🌟 Why This Stack?
+---
+
+### 🌟 Why This Stack?
 
 - **Deno** brings modern security and performance features to the backend, eliminating some of the common challenges in Node.js environments.
+- **Oak Middleware** enhances Deno by providing a robust framework for building web servers and APIs with routing, security, and efficient request handling.
 - **Postgres** offers a robust relational database solution that integrates well with Supabase for quick backend setup.
 - **Supabase** accelerates development by providing built-in services like authentication and real-time data syncing without the need to build a custom backend.
 - **React** is perfect for building dynamic, highly interactive UIs, allowing for a smooth and fluid user experience.
@@ -50,3 +65,5 @@ This app combines powerful, modern technologies to create a fast, scalable, and 
 ## 🌐 Conclusion
 
 This stack is a powerful combination of modern technologies that enable you to build scalable, maintainable, and efficient applications quickly. Whether you're building a small app or a large-scale production system, these tools work together seamlessly to deliver high performance both on the backend and frontend, with added AI-powered capabilities for smarter, more interactive experiences.
+
+---
