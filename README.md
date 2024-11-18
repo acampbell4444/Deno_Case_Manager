@@ -1,6 +1,3 @@
-Certainly! Here's an updated version of your stack description with **Oak Middleware** given its own dedicated section:
-
----
 
 # Deno + Postgres + Supabase + React + Vite + Redux + RTK Query + Material UI + OpenAI App
 
