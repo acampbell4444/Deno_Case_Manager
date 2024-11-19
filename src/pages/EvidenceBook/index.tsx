@@ -7,17 +7,19 @@ import {
     Fab,
     Grid,
     IconButton,
+    InputAdornment,
     TextField,
     Typography,
-    InputAdornment,
 } from "@mui/material";
-import { Add, Visibility, Search } from "@mui/icons-material";
-import { useGetEvidenceBooksByUserIdQuery } from '../../services/evidence.ts';
-import { useNavigate } from 'react-router-dom';
+import { Add, Search, Visibility } from "@mui/icons-material";
+import { useGetEvidenceBooksByUserIdQuery } from "../../services/evidence.ts";
+import { useNavigate } from "react-router-dom";
 
 const EvidenceBook = () => {
     const navigate = useNavigate();
-    const { data = [], error, isLoading } = useGetEvidenceBooksByUserIdQuery("123344"); //TODO: Make dynamic
+    const { data = [], error, isLoading } = useGetEvidenceBooksByUserIdQuery(
+        "123344",
+    ); //TODO: Make dynamic
     const [search, setSearch] = useState<string>("");
 
     const handleSearchChange = (event: React.ChangeEvent<any>) => {
@@ -25,14 +27,16 @@ const EvidenceBook = () => {
     };
 
     return (
-        <div style={{ backgroundColor: "#111111", minHeight: "100vh" }}> {/* Full page background */}
+        <div style={{ backgroundColor: "#111111", minHeight: "100vh" }}>
+            {/* Full page background */}
             <Container
-                maxWidth="md"
+                maxWidth="lg" // Increase maxWidth to make the cards wider
                 sx={{
-                    backgroundColor: "#000000", // Dark container background
                     padding: "20px",
+                    pt: "50px", // Padding top to ensure content is below the navbar
                     borderRadius: "10px",
                     minHeight: "100vh", // Ensures the container spans full height of the page
+                    backgroundColor: "#111111", // Ensuring background color is uniform
                 }}
             >
                 <Typography
@@ -44,7 +48,6 @@ const EvidenceBook = () => {
                     Evidence Books
                 </Typography>
 
-                {/* Search Bar */}
                 <TextField
                     label="Search"
                     variant="outlined"
@@ -53,21 +56,28 @@ const EvidenceBook = () => {
                     onChange={handleSearchChange}
                     sx={{
                         marginBottom: "20px",
-                        backgroundColor: "#333", // Dark background for input fields
-                        color: "#ffffff", // White text
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
+                        backgroundColor: "#ffffff", // White background for input fields
+                        color: "#333", // Dark text color for readability
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
                                 borderColor: "#34D399", // Green border for input
                             },
+                            "&:hover fieldset": {
+                                borderColor: "#34D399", // Green border on hover
+                            },
                         },
-                        '& .MuiInputLabel-root': {
-                            color: "#ffffff", // White label
+                        "& .MuiInputLabel-root": {
+                            color: "#333", // Dark color for label
+                        },
+                        "& .MuiInputLabel-root.Mui-focused": {
+                            color: "#34D399", // Green color for label when focused
                         },
                     }}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <Search sx={{ color: "#34D399" }} /> {/* Green search icon */}
+                                <Search sx={{ color: "#34D399" }} />{" "}
+                                {/* Green search icon */}
                             </InputAdornment>
                         ),
                     }}
@@ -76,10 +86,13 @@ const EvidenceBook = () => {
                 <Grid container spacing={3}>
                     {data
                         .filter((journal: any) =>
-                            journal.title.toLowerCase().includes(search.toLowerCase())
+                            journal.title.toLowerCase().includes(
+                                search.toLowerCase(),
+                            )
                         )
                         .map((journal: any) => (
-                            <Grid item xs={12} key={journal.id}>
+                            <Grid item xs={12} md={4} key={journal.id}>
+                                {/* Adjust grid item size */}
                                 <Card
                                     variant="outlined"
                                     sx={{
@@ -94,7 +107,10 @@ const EvidenceBook = () => {
                                         transition: "all 0.3s ease-in-out", // Smooth transitions
                                         padding: 2,
                                     }}
-                                    onClick={() => navigate(`/evidence_books/${journal.id}`)}
+                                    onClick={() =>
+                                        navigate(
+                                            `/evidence_books/${journal.id}`,
+                                        )}
                                 >
                                     <CardContent>
                                         <Typography
@@ -110,9 +126,14 @@ const EvidenceBook = () => {
                                         </Typography>
 
                                         <Typography
-                                            sx={{ color: "#B0B0B0", marginBottom: "10px" }} // Lighter gray text for secondary information
+                                            sx={{
+                                                color: "#B0B0B0",
+                                                marginBottom: "10px",
+                                            }} // Lighter gray text for secondary information
                                         >
-                                            Created on: {new Date(journal.created_at).toLocaleString()}
+                                            Created on:{" "}
+                                            {new Date(journal.created_at)
+                                                .toLocaleString()}
                                         </Typography>
 
                                         <div style={{ marginTop: 10 }}>
@@ -122,18 +143,25 @@ const EvidenceBook = () => {
                                             >
                                                 Tags:
                                             </Typography>
-                                            {journal.tags.map((tag: string, index: number) => (
+                                            {journal.tags.map((
+                                                tag: string,
+                                                index: number,
+                                            ) => (
                                                 <Chip
                                                     key={index}
                                                     label={tag}
                                                     sx={{
-                                                        margin: "5px 10px 5px 0",
-                                                        backgroundColor: "#34D399", // Green background for tags
+                                                        margin:
+                                                            "5px 10px 5px 0",
+                                                        backgroundColor:
+                                                            "#34D399", // Green background for tags
                                                         color: "white",
                                                         fontWeight: "bold",
-                                                        transition: "all 0.3s ease-in-out",
-                                                        '&:hover': {
-                                                            backgroundColor: "#2C9E77", // Darker green on hover
+                                                        transition:
+                                                            "all 0.3s ease-in-out",
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                "#2C9E77", // Darker green on hover
                                                         },
                                                     }}
                                                 />
@@ -153,16 +181,27 @@ const EvidenceBook = () => {
                                             >
                                                 Collaborators:
                                             </Typography>
-                                            {journal.collaborator_email_list.map((email: string, index: number) => (
-                                                <Typography
-                                                    key={index}
-                                                    sx={{ marginLeft: 5, color: "#ffffff" }} // White text for emails
-                                                >
-                                                    {index === journal.collaborator_email_list.length - 1
-                                                        ? email
-                                                        : email + ", "}
-                                                </Typography>
-                                            ))}
+                                            {journal.collaborator_email_list
+                                                .map((
+                                                    email: string,
+                                                    index: number,
+                                                ) => (
+                                                    <Typography
+                                                        key={index}
+                                                        sx={{
+                                                            marginLeft: 5,
+                                                            color: "#ffffff",
+                                                        }} // White text for emails
+                                                    >
+                                                        {index ===
+                                                                journal
+                                                                        .collaborator_email_list
+                                                                        .length -
+                                                                    1
+                                                            ? email
+                                                            : email + ", "}
+                                                    </Typography>
+                                                ))}
                                         </div>
 
                                         {/* Action Buttons */}
@@ -178,7 +217,10 @@ const EvidenceBook = () => {
                                                     e.stopPropagation();
                                                 }}
                                             >
-                                                <Visibility sx={{ color: "#34D399" }} /> {/* Green icon */}
+                                                <Visibility
+                                                    sx={{ color: "#34D399" }}
+                                                />{" "}
+                                                {/* Green icon */}
                                             </IconButton>
                                         </div>
                                     </CardContent>
@@ -190,7 +232,12 @@ const EvidenceBook = () => {
                 <Fab
                     color="primary"
                     aria-label="add"
-                    sx={{ position: "fixed", bottom: 20, right: 20, backgroundColor: "#34D399" }} // Green button
+                    sx={{
+                        position: "fixed",
+                        bottom: 20,
+                        right: 20,
+                        backgroundColor: "#34D399",
+                    }} // Green button
                 >
                     <Add sx={{ color: "#fff" }} />
                 </Fab>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Box, Button, Dialog, Stack, Typography } from "@mui/material";
+import {  Box, Button, Dialog, Stack } from "@mui/material";
 import { Transition } from "../../components/Transition.tsx";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -20,14 +20,14 @@ import {
     setCombinedInitialState,
     setCreateOrEditFormState,
 } from "../../slices/evidence.ts";
-import { heroIconStyle } from "../../themes/icons.ts";
-import { heroTextStyle } from "../../themes/text.ts";
 import {
     useDeleteEvidenceEntryByIdMutation,
+    useGetEvidenceBooksByUserIdQuery,
     useGetEvidenceByBookIdQuery,
     useLazyGetEvidenceByBookIdQuery,
 } from "../../services/evidence.ts";
 import { useParams } from "react-router-dom";
+import GreenAvatarIcon from "../../components/NameTooltipAvatarAndIcon.tsx";
 
 interface EvidenceRecord {
     id: string;
@@ -40,13 +40,20 @@ interface EvidenceRecord {
 const EvidenceDataGrid = () => {
     const dispatch = useDispatch();
     const params = useParams();
-    console.log("params", params);
 
     // Constants
     const EVIDENCE_BOOK_ID = params.id || "";
     const { data = [] as any, error, isLoading } = useGetEvidenceByBookIdQuery(
         EVIDENCE_BOOK_ID,
     );
+
+    const { data: evidenceBookData = [] as any } =
+        useGetEvidenceBooksByUserIdQuery("22");
+    const currentEvidenceBook = evidenceBookData.find((book: any) =>
+        book.id === EVIDENCE_BOOK_ID
+    );
+
+    const evidenceBookTitle = currentEvidenceBook?.title || "";
 
     const [deleteEvidenceEntryById] = useDeleteEvidenceEntryByIdMutation();
 
@@ -57,7 +64,6 @@ const EvidenceDataGrid = () => {
 
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-    // Type the handlers for toggle and delete actions
     const handleDisplayEvidenceDialogViewToggle = (open: boolean, row: any) => {
         dispatch(
             setCombinedInitialState({
@@ -97,90 +103,56 @@ const EvidenceDataGrid = () => {
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             <HeroSection>
                 <Stack direction="row" spacing={2} justifyContent="center">
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            ...heroTextStyle,
-                            fontSize: "1.5rem",
-                            fontWeight: "bold",
-                        }}
-                    >
-                        <Avatar
-                            sx={{ ...heroIconStyle, mr: 1, color: "#FF6F61" }}
-                        >
-                            <DateRangeIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        EVIDENCE RECORDS
-                    </Typography>
+                    <GreenAvatarIcon
+                        Icon={DateRangeIcon}
+                        tooltipTitle="Filter by date range"
+                        label="Evidence Records for "
+                        highlightedLabel={evidenceBookTitle}
+                        iconSize={34}
+                    />
                 </Stack>
 
-                {/* Bottom Row: Other icons */}
                 <Stack
                     direction="row"
                     spacing={2}
                     justifyContent="center"
                     sx={{ marginTop: 2 }}
                 >
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "primary.main",
-                                mr: 2,
-                            }}
-                        >
-                            <AddIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Create
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "success.main",
-                                mr: 2,
-                            }}
-                        >
-                            <EditIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Edit
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "error.main",
-                                mr: 2,
-                            }}
-                        >
-                            <DeleteIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Delete
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "info.main", mr: 2 }}
-                        >
-                            <VisibilityIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        View
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "#696969", mr: 2 }}
-                        >
-                            <MoreVertIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Filter
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "#696969", mr: 2 }}
-                        >
-                            <ArrowUpwardIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Sort
-                    </Typography>
+                    <GreenAvatarIcon
+                        Icon={AddIcon}
+                        tooltipTitle="Create a new evidence record"
+                        label="Create"
+                    />
+
+                    <GreenAvatarIcon
+                        Icon={EditIcon}
+                        tooltipTitle="Edit an existing evidence record"
+                        label="Edit"
+                    />
+
+                    <GreenAvatarIcon
+                        Icon={DeleteIcon}
+                        tooltipTitle="Delete an existing evidence record"
+                        label="Delete"
+                    />
+
+                    <GreenAvatarIcon
+                        Icon={VisibilityIcon}
+                        tooltipTitle="View an existing evidence record"
+                        label="View"
+                    />
+
+                    <GreenAvatarIcon
+                        Icon={MoreVertIcon}
+                        tooltipTitle="Filter by column header in the table"
+                        label="Filter"
+                    />
+
+                    <GreenAvatarIcon
+                        Icon={ArrowUpwardIcon}
+                        tooltipTitle="Sort by column header in the table"
+                        label="Sort"
+                    />
                 </Stack>
             </HeroSection>
 

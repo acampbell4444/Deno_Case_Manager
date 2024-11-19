@@ -2,12 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setEndDate, setStartDate } from "../slices/emails.ts";
 import {
-    Avatar,
     Box,
     Button,
     Stack,
     TextField,
-    Tooltip,
     Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -19,11 +17,10 @@ import {
 } from "@mui/icons-material";
 import moment from "moment";
 import HeroSection from "../components/HeroHeader.tsx";
-import { plainBlueGradient } from "../themes/colors.ts";
+import NameTooltipAvatarAndIcon from "../components/NameTooltipAvatarAndIcon.tsx";
 import { fetchAndParseEmails } from "../thunks/emails.ts";
 import { filterEmailsByDate } from "../helpers/emails.ts";
-import { heroIconStyle } from "../themes/icons.ts";
-import { heroTextStyle } from "../themes/text.ts";
+import GreenAvatarIcon from "../components/NameTooltipAvatarAndIcon.tsx";
 
 const EmailRecords = () => {
     const dispatch = useDispatch();
@@ -69,73 +66,35 @@ const EmailRecords = () => {
         <>
             <HeroSection>
                 <Stack direction="row" spacing={2} justifyContent="center">
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            ...heroTextStyle,
-                            fontSize: "1.5rem",
-                            fontWeight: "bold",
-                        }}
-                    >
-                        <Avatar
-                            sx={{ ...heroIconStyle, mr: 1, color: "#FF6F61" }}
-                        >
-                            <EmailIcon sx={{ fontSize: 20 }} />
-                        </Avatar>
-                        Email Records
-                    </Typography>
+                    <NameTooltipAvatarAndIcon
+                        Icon={EmailIcon}
+                        tooltipTitle="Email Records"
+                        label="Email Records"
+                        iconSize={34}
+                    />
                 </Stack>
-
-                {/* Bottom Row: Other icons */}
                 <Stack
                     direction="row"
                     spacing={2}
                     justifyContent="center"
                     sx={{ marginTop: 2 }}
                 >
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Tooltip title="Search by date range below">
-                            <Avatar
-                                sx={{
-                                    ...heroIconStyle,
-                                    color: "primary.main",
-                                    mr: 2,
-                                }}
-                            >
-                                <DateRangeIcon sx={{ fontSize: 16 }} />
-                            </Avatar>
-                        </Tooltip>
-                        Search
-                    </Typography>
+                    <NameTooltipAvatarAndIcon
+                        Icon={DateRangeIcon}
+                        tooltipTitle="Filter by date range"
+                        label="Date Range"
+                    />
 
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Tooltip title="Filter by column header in the table">
-                            <Avatar
-                                sx={{
-                                    ...heroIconStyle,
-                                    color: "#696969",
-                                    mr: 2,
-                                }}
-                            >
-                                <MoreVertIcon sx={{ fontSize: 16 }} />
-                            </Avatar>
-                        </Tooltip>
-                        Filter
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Tooltip title="Sort by column header in the table">
-                            <Avatar
-                                sx={{
-                                    ...heroIconStyle,
-                                    color: "#696969",
-                                    mr: 2,
-                                }}
-                            >
-                                <ArrowUpwardIcon sx={{ fontSize: 16 }} />
-                            </Avatar>
-                        </Tooltip>
-                        Sort
-                    </Typography>
+                    <GreenAvatarIcon
+                        Icon={MoreVertIcon}
+                        tooltipTitle="Filter by column header in the table"
+                        label="Filter"
+                    />
+                    <GreenAvatarIcon
+                        Icon={ArrowUpwardIcon}
+                        tooltipTitle="Sort by column header in the table"
+                        label="Sort"
+                    />
                 </Stack>
             </HeroSection>
 
@@ -153,9 +112,7 @@ const EmailRecords = () => {
                     value={moment(startDate).format("YYYY-MM-DD")}
                     onChange={(e: any) =>
                         dispatch(setStartDate(e.target.value))}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                    InputLabelProps={{ shrink: true }}
                     sx={{ mr: "10px" }}
                 />
 
