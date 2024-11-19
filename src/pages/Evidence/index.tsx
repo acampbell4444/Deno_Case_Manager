@@ -186,19 +186,29 @@ const EvidenceDataGrid = () => {
 
             <Box sx={{ width: "100%", textAlign: "center", mb: 2, mt: 2 }}>
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() =>
                         handleCreateOrEditFormDialogViewToggle(true, "create")}
                     sx={{
-                        backgroundColor: "primary.main",
-                        color: "white",
+                        borderColor: "#34D399", // Green border color
+                        color: "#34D399", // Green text color
                         borderRadius: "8px",
                         padding: "12px 16px",
                         textTransform: "none",
                         fontSize: "16px",
                         fontWeight: "bold",
                         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                        "&:hover": { backgroundColor: "primary.dark" },
+                        "&:hover": {
+                            backgroundColor: "#34D399", // Green background on hover
+                            color: "#ffffff", // White text on hover
+                            borderColor: "#34D399", // Keep green border on hover
+                        },
+                        "&.Mui-disabled": {
+                            color: "#34D399", // Green text on disabled state
+                            borderColor: "#555", // Lighter dark border for disabled state
+                            backgroundColor: "#222", // Dark background for disabled state
+                            opacity: 0.6, // Reduced opacity on disabled
+                        },
                         transition: "all 0.3s ease",
                     }}
                 >

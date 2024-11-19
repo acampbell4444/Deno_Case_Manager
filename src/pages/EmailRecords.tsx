@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setEndDate, setStartDate } from "../slices/emails.ts";
-import { Avatar, Box, Button, Stack, Typography, TextField } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Button,
+    Stack,
+    TextField,
+    Tooltip,
+    Typography,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import {
     ArrowUpward as ArrowUpwardIcon,
@@ -86,32 +94,46 @@ const EmailRecords = () => {
                     sx={{ marginTop: 2 }}
                 >
                     <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "primary.main",
-                                mr: 2,
-                            }}
-                        >
-                            <DateRangeIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
+                        <Tooltip title="Search by date range below">
+                            <Avatar
+                                sx={{
+                                    ...heroIconStyle,
+                                    color: "primary.main",
+                                    mr: 2,
+                                }}
+                            >
+                                <DateRangeIcon sx={{ fontSize: 16 }} />
+                            </Avatar>
+                        </Tooltip>
                         Search
                     </Typography>
 
                     <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "#696969", mr: 2 }}
-                        >
-                            <MoreVertIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
+                        <Tooltip title="Filter by column header in the table">
+                            <Avatar
+                                sx={{
+                                    ...heroIconStyle,
+                                    color: "#696969",
+                                    mr: 2,
+                                }}
+                            >
+                                <MoreVertIcon sx={{ fontSize: 16 }} />
+                            </Avatar>
+                        </Tooltip>
                         Filter
                     </Typography>
                     <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "#696969", mr: 2 }}
-                        >
-                            <ArrowUpwardIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
+                        <Tooltip title="Sort by column header in the table">
+                            <Avatar
+                                sx={{
+                                    ...heroIconStyle,
+                                    color: "#696969",
+                                    mr: 2,
+                                }}
+                            >
+                                <ArrowUpwardIcon sx={{ fontSize: 16 }} />
+                            </Avatar>
+                        </Tooltip>
                         Sort
                     </Typography>
                 </Stack>
@@ -153,13 +175,16 @@ const EmailRecords = () => {
                         size: "large",
                         variant: "contained",
                         marginLeft: "10px",
-                        backgroundImage: plainBlueGradient,
-                        color: "white",
-                        "&:hover": { backgroundImage: plainBlueGradient },
+                        backgroundColor: "#333", // Dark background
+                        color: "#34D399", // Green text color
+                        "&:hover": {
+                            backgroundColor: "#2C9E77", // Darker green background on hover
+                            color: "#ffffff", // White text on hover
+                        },
                         "&.Mui-disabled": {
-                            color: "white",
-                            backgroundImage: plainBlueGradient,
-                            opacity: 0.6,
+                            color: "#34D399", // Green text on disabled state
+                            backgroundColor: "#555", // Lighter dark background for disabled state
+                            opacity: 0.6, // Reduced opacity on disabled
                         },
                     }}
                     disabled={loading || parsing || (!startDate && !endDate)}

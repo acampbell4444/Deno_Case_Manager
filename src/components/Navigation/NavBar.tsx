@@ -6,31 +6,31 @@ import {
     IconButton,
     List,
     ListItem,
-    ListItemText,
     Toolbar,
     Typography,
     useMediaQuery,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import NavButton from "./NavButton.tsx"; // Assuming NavButton is properly defined
+import NavButton from "./NavButton.tsx";
 
 const NavBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
-    // Detect if the screen size is small (mobile)
     const isMobile = useMediaQuery((theme: any) =>
         theme.breakpoints.down("md")
     );
 
-    // Handle opening and closing the Drawer
-    const handleDrawerToggle = () => {
-        setDrawerOpen(!drawerOpen);
-    };
+    const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
     return (
         <AppBar
             position="sticky"
-            sx={{ background: "#fafafa", boxShadow: 4, padding: "0 20px" }}
+            sx={{
+                background: "#111111", // Dark background
+                boxShadow: 4,
+                padding: "0 20px",
+                color: "#ffffff", // Light text color
+            }}
         >
             <Toolbar
                 sx={{
@@ -48,39 +48,51 @@ const NavBar = () => {
 
                 <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", color: "#333" }}
+                    sx={{
+                        fontWeight: "bold",
+                        color: "#34D399", // Green for the title
+                    }}
                 >
                     Campbell vs. Rivet
                 </Typography>
 
                 {isMobile
                     ? (
-                        // Hamburger menu for small screens
                         <IconButton
                             onClick={handleDrawerToggle}
-                            sx={{ color: "#333" }}
+                            sx={{ color: "#34D399" }} // Green icon
                         >
                             <MenuIcon />
                         </IconButton>
                     )
                     : (
-                        // Navigation links for larger screens
                         <Box sx={{ display: "flex" }}>
                             <NavButton label="Home" path="/" />
-                            <NavButton label="Evidence" path="/evidence_books" />
+
+                            <NavButton
+                                label="Arguments"
+                                path="/arguments"
+                            />
+
+                            <NavButton
+                                label="Evidence"
+                                path="/evidence_books"
+                            />
+                            
                             <NavButton
                                 label="Emails"
                                 path="/email_records"
                             />
+
                             <NavButton
                                 label="Texts"
                                 path="/text_records"
                             />
+
                             <NavButton label="AI" path="/open_ai" />
                         </Box>
                     )}
 
-                {/* Drawer for mobile */}
                 <Drawer
                     anchor="right"
                     open={drawerOpen}
@@ -89,30 +101,45 @@ const NavBar = () => {
                         "& .MuiDrawer-paper": {
                             width: 250,
                             paddingTop: 10,
-                            backgroundColor: "#fafafa",
+                            backgroundColor: "#111111", // Dark background for the drawer
+                            color: "#ffffff", // Light text color inside drawer
                         },
                     }}
                 >
                     <List>
-                        <ListItem component='div' onClick={handleDrawerToggle}>
-                            <NavButton label="Home" path="/"  />
+                        <ListItem component="div" onClick={handleDrawerToggle}>
+                            <NavButton label="Home" path="/" />
                         </ListItem>
-                        <ListItem component='div' onClick={handleDrawerToggle}>
-                            <NavButton label="Evidence" path="/evidence_books" />
+
+                        <ListItem component="div" onClick={handleDrawerToggle}>
+                            <NavButton
+                                label="Arguments"
+                                path="/arguments"
+                            />
                         </ListItem>
-                        <ListItem component='div' onClick={handleDrawerToggle}>
+
+                        <ListItem component="div" onClick={handleDrawerToggle}>
+                            <NavButton
+                                label="Evidence"
+                                path="/evidence_books"
+                            />
+                        </ListItem>
+
+                        <ListItem component="div" onClick={handleDrawerToggle}>
                             <NavButton
                                 label="Emails"
                                 path="/email_records"
                             />
                         </ListItem>
-                        <ListItem component='div' onClick={handleDrawerToggle}>
+
+                        <ListItem component="div" onClick={handleDrawerToggle}>
                             <NavButton
                                 label="Texts"
                                 path="/text_records"
                             />
                         </ListItem>
-                        <ListItem component='div' onClick={handleDrawerToggle}>
+
+                        <ListItem component="div" onClick={handleDrawerToggle}>
                             <NavButton label="Open AI" path="/open_ai" />
                         </ListItem>
                     </List>

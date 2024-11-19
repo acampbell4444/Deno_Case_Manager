@@ -2,18 +2,14 @@ import React from 'react';
 import { Box, Container, Typography, Button, Tooltip, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import { Notifications as NotificationsIcon, Email as EmailIcon, Event as EventIcon } from '@mui/icons-material';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
-// import EmailIcon from '@mui/icons-material/Email';
-// import EventIcon from '@mui/icons-material/Event';
 
-// Full Background Hero Section
 const HeroSection = styled(Box)(({ theme }) => ({
   backgroundImage: 'url("/FamilyJustice.png")',
   backgroundSize: 'cover',
   minHeight: 'calc(100vh)',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'flex-start',
+  justifyContent: 'center', // Center the content vertically
   alignItems: 'center',
   textAlign: 'center',
   position: 'relative',
@@ -26,7 +22,7 @@ const HeroSection = styled(Box)(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay for readability
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Dark overlay for readability
   },
   zIndex: 1,
 }));
@@ -36,10 +32,11 @@ const ContentContainer = styled(Container)(({ theme }) => ({
   zIndex: 2,
   textAlign: 'center',
   color: '#ffffff',
+  maxWidth: 'md',
 }));
 
 const FooterStrip = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[900], // Charcoal color
+  backgroundColor: '#111111', // Dark footer background
   color: '#fff',
   width: '100%',
   position: 'fixed',
@@ -48,13 +45,15 @@ const FooterStrip = styled(Box)(({ theme }) => ({
   zIndex: 2,
   height: 60,
   display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 }));
 
 const IconWrapper = styled(Grid)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-evenly',
   alignItems: 'center',
-  gap: theme.spacing(2),
+  gap: theme.spacing(3),
 }));
 
 const LandingPage = () => {
@@ -63,12 +62,13 @@ const LandingPage = () => {
       {/* Hero Section with Full Background */}
       <HeroSection>
         <ContentContainer>
-          <Typography variant="h3" gutterBottom>
+          <Typography variant="h3" gutterBottom sx={{ fontWeight: 600, color: "#34D399" }}>
             Welcome to Your Family Law Assistant
           </Typography>
-          <Typography variant="h6" paragraph>
+          <Typography variant="h6" paragraph sx={{ color: "#B0B0B0" }}>
             Empowering families with intelligent legal support. Get instant access to resources, insights, and more.
           </Typography>
+          {/* Uncomment the button if you want to activate it */}
           {/* <Button variant="contained" color="primary" size="large" href="#get-started">
             Get Started
           </Button> */}
