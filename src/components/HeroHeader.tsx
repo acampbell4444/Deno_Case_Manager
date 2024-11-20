@@ -1,10 +1,9 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
-import { plainBlueGradient } from '../themes/colors.ts';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   marginTop: '10px', // Ensures placement below navbar
-  background: plainBlueGradient,
+  backgroundColor: '#111111', // Dark background to match the theme
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   color: '#fff',
@@ -23,7 +22,7 @@ const HeroSection = styled(Box)(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Slightly darker overlay for better contrast
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Darker overlay for better contrast
   },
   zIndex: 1,
 }));

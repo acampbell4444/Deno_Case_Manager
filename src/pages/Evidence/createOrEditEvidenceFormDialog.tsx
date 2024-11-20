@@ -178,7 +178,28 @@ const CreateEvidenceForm = () => {
                                         variant="contained"
                                         component="label"
                                         startIcon={<CloudUploadIcon />}
-                                        sx={{ marginBottom: 2 }}
+                                        sx={{
+                                            backgroundColor: "#34D399", // Green background
+                                            color: "white", // White text
+                                            borderRadius: "8px",
+                                            padding: "12px 16px",
+                                            textTransform: "none",
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                            boxShadow:
+                                                "0 4px 6px rgba(0, 0, 0, 0.1)",
+                                            "&:hover": {
+                                                backgroundColor: "#2C9E77", // Darker green on hover
+                                                color: "#ffffff", // White text on hover
+                                            },
+                                            "&.Mui-disabled": {
+                                                backgroundColor: "#555", // Lighter background for disabled state
+                                                color: "white", // White text for disabled state
+                                                opacity: 0.6, // Reduced opacity for disabled state
+                                            },
+                                            transition: "all 0.3s ease",
+                                            marginBottom: 2,
+                                        }}
                                     >
                                         Choose File
                                         <input
@@ -188,6 +209,7 @@ const CreateEvidenceForm = () => {
                                                 handleFileUpload(e, form)}
                                         />
                                     </Button>
+
                                     {uploadedFile && (
                                         <Box
                                             sx={{

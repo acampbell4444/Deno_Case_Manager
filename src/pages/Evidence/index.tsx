@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Box, Button, Dialog, Stack, Typography } from "@mui/material";
+import { Box, Button, Dialog, Stack } from "@mui/material";
 import { Transition } from "../../components/Transition.tsx";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -10,6 +10,7 @@ import {
     Edit as EditIcon,
     MoreVert as MoreVertIcon,
     Visibility as VisibilityIcon,
+    ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import HeroSection from "../../components/HeroHeader.tsx";
@@ -20,33 +21,33 @@ import {
     setCombinedInitialState,
     setCreateOrEditFormState,
 } from "../../slices/evidence.ts";
-import { heroIconStyle } from "../../themes/icons.ts";
-import { heroTextStyle } from "../../themes/text.ts";
 import {
     useDeleteEvidenceEntryByIdMutation,
+    useGetEvidenceBooksByUserIdQuery,
     useGetEvidenceByBookIdQuery,
     useLazyGetEvidenceByBookIdQuery,
 } from "../../services/evidence.ts";
-import { useParams } from "react-router-dom";
-
-interface EvidenceRecord {
-    id: string;
-    name: string;
-    subject: string;
-    fileName: string;
-    date: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import NameTooltipAvatarAndIcon from "../../components/NameTooltipAvatarAndIcon.tsx";
 
 const EvidenceDataGrid = () => {
     const dispatch = useDispatch();
     const params = useParams();
-    console.log("params", params);
+    const navigate = useNavigate()
 
     // Constants
     const EVIDENCE_BOOK_ID = params.id || "";
     const { data = [] as any, error, isLoading } = useGetEvidenceByBookIdQuery(
         EVIDENCE_BOOK_ID,
     );
+
+    const { data: evidenceBookData = [] as any } =
+        useGetEvidenceBooksByUserIdQuery("22");
+    const currentEvidenceBook = evidenceBookData.find((book: any) =>
+        book.id === EVIDENCE_BOOK_ID
+    );
+
+    const evidenceBookTitle = currentEvidenceBook?.title || "";
 
     const [deleteEvidenceEntryById] = useDeleteEvidenceEntryByIdMutation();
 
@@ -57,7 +58,6 @@ const EvidenceDataGrid = () => {
 
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-    // Type the handlers for toggle and delete actions
     const handleDisplayEvidenceDialogViewToggle = (open: boolean, row: any) => {
         dispatch(
             setCombinedInitialState({
@@ -77,7 +77,7 @@ const EvidenceDataGrid = () => {
     const handleCreateOrEditFormDialogViewToggle = (
         open: boolean,
         type = "create",
-        row: EvidenceRecord | null = null,
+        row: any = null,
     ) => {
         dispatch(setCombinedInitialState({ createOrEditDialogOpen: open }));
         dispatch(
@@ -93,112 +93,100 @@ const EvidenceDataGrid = () => {
         handleCreateOrEditFormDialogViewToggle(true, "edit", row);
     };
 
+    console.log('data', data);  
+
+    // const evidence_book_id = EVIDENCE_BOOK_ID;
+
     return (
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             <HeroSection>
                 <Stack direction="row" spacing={2} justifyContent="center">
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            ...heroTextStyle,
-                            fontSize: "1.5rem",
-                            fontWeight: "bold",
-                        }}
-                    >
-                        <Avatar
-                            sx={{ ...heroIconStyle, mr: 1, color: "#FF6F61" }}
-                        >
-                            <DateRangeIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        EVIDENCE RECORDS
-                    </Typography>
+                    <NameTooltipAvatarAndIcon
+                        Icon={DateRangeIcon}
+                        tooltipTitle="Filter by date range"
+                        label="Evidence Records for "
+                        highlightedLabel={evidenceBookTitle}
+                        iconSize={34}
+                    />
                 </Stack>
 
-                {/* Bottom Row: Other icons */}
+                <div style={{ position: "absolute", top: 20, left: 20 }} onClick={() => navigate('/evidence_books')}>
+                    <NameTooltipAvatarAndIcon
+                        Icon={ArrowBackIcon}
+                        tooltipTitle="Go back to all evidence books"
+                        label="Back"
+                    />
+                </div>
+
                 <Stack
                     direction="row"
                     spacing={2}
                     justifyContent="center"
                     sx={{ marginTop: 2 }}
                 >
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "primary.main",
-                                mr: 2,
-                            }}
-                        >
-                            <AddIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Create
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "success.main",
-                                mr: 2,
-                            }}
-                        >
-                            <EditIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Edit
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{
-                                ...heroIconStyle,
-                                color: "error.main",
-                                mr: 2,
-                            }}
-                        >
-                            <DeleteIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Delete
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "info.main", mr: 2 }}
-                        >
-                            <VisibilityIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        View
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "#696969", mr: 2 }}
-                        >
-                            <MoreVertIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Filter
-                    </Typography>
-                    <Typography variant="h6" sx={heroTextStyle}>
-                        <Avatar
-                            sx={{ ...heroIconStyle, color: "#696969", mr: 2 }}
-                        >
-                            <ArrowUpwardIcon sx={{ fontSize: 16 }} />
-                        </Avatar>
-                        Sort
-                    </Typography>
+                    <NameTooltipAvatarAndIcon
+                        Icon={AddIcon}
+                        tooltipTitle="Create a new evidence record"
+                        label="Create"
+                    />
+
+                    <NameTooltipAvatarAndIcon
+                        Icon={EditIcon}
+                        tooltipTitle="Edit an existing evidence record"
+                        label="Edit"
+                    />
+
+                    <NameTooltipAvatarAndIcon
+                        Icon={DeleteIcon}
+                        tooltipTitle="Delete an existing evidence record"
+                        label="Delete"
+                    />
+
+                    <NameTooltipAvatarAndIcon
+                        Icon={VisibilityIcon}
+                        tooltipTitle="View an existing evidence record"
+                        label="View"
+                    />
+
+                    <NameTooltipAvatarAndIcon
+                        Icon={MoreVertIcon}
+                        tooltipTitle="Filter by column header in the table"
+                        label="Filter"
+                    />
+
+                    <NameTooltipAvatarAndIcon
+                        Icon={ArrowUpwardIcon}
+                        tooltipTitle="Sort by column header in the table"
+                        label="Sort"
+                    />
                 </Stack>
             </HeroSection>
 
             <Box sx={{ width: "100%", textAlign: "center", mb: 2, mt: 2 }}>
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() =>
                         handleCreateOrEditFormDialogViewToggle(true, "create")}
                     sx={{
-                        backgroundColor: "primary.main",
-                        color: "white",
+                        borderColor: "#34D399", // Green border color
+                        color: "#34D399", // Green text color
                         borderRadius: "8px",
                         padding: "12px 16px",
                         textTransform: "none",
                         fontSize: "16px",
                         fontWeight: "bold",
                         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                        "&:hover": { backgroundColor: "primary.dark" },
+                        "&:hover": {
+                            backgroundColor: "#34D399", // Green background on hover
+                            color: "#ffffff", // White text on hover
+                            borderColor: "#34D399", // Keep green border on hover
+                        },
+                        "&.Mui-disabled": {
+                            color: "#34D399", // Green text on disabled state
+                            borderColor: "#555", // Lighter dark border for disabled state
+                            backgroundColor: "#222", // Dark background for disabled state
+                            opacity: 0.6, // Reduced opacity on disabled
+                        },
                         transition: "all 0.3s ease",
                     }}
                 >
