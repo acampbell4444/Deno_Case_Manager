@@ -1,18 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
 import { load } from "https://deno.land/std@0.224.0/dotenv/mod.ts";
 const env_vars = await load({ envPath: "./.env" });
-
-export const supabase = createClient(
-    env_vars.SUP_URL,
-    env_vars.SUP_KEY
-);
-
+import { supabase } from "./client.ts";
 
 
 export const fetchEvidenceByBookId = async (
-  evidenceBookId: string,
-  supabase: any,
-) => {
+  evidenceBookId: string) => {
   try {
     const { data, error } = await supabase
       .from("ev_entries")
@@ -30,9 +22,7 @@ const BUCKET_NAME = "evidence_attachments"; //TODO: make dynamic
 
 // uploadEvidenceFile
 export const uploadEvidenceFile = async (
-  { file, newFileName }: any,
-  supabase: any,
-) => {
+  { file, newFileName }: any) => {
   
   try {
     const { data, error } = await supabase
@@ -56,9 +46,7 @@ export const uploadEvidenceFile = async (
 
 // createEvidenceRecord
 export const createEvidenceRecord = async (
-  saveBody: any,
-  supabase: any,
-) => {
+  saveBody: any) => {
   try {
     const { data, error } = await supabase
       .from("ev_entries")
@@ -74,9 +62,7 @@ export const createEvidenceRecord = async (
 
 // fetchAllEvidenceBooksByUserId
 export const fetchAllEvidenceBooksByUserId = async (
-  userId: string,
-  supabase: any,
-) => {
+  userId: string) => {
   try {
     const user_id = env_vars.SUP_USER; //TODO: make dynamic
     const { data, error } = await supabase
@@ -92,9 +78,7 @@ export const fetchAllEvidenceBooksByUserId = async (
 };
 
 export const deleteEvidenceRecord = async (
-  { id, fileName }: any,
-  supabase: any,
-) => {
+  { id, fileName }: any) => {
   console.log("deleteEvidenceRecord", id, fileName);
   try {
     const deleteS3Response = await supabase
