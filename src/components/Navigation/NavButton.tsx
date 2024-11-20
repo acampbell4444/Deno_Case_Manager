@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 interface NavButtonProps {
     label: string;
     path: string;
+    isActive: boolean; // New prop to determine if the button is active
 }
 
-const NavButton: React.FC<NavButtonProps> = ({ label, path }) => {
+const NavButton: React.FC<NavButtonProps> = ({ label, path, isActive }) => {
     const navigate = useNavigate();
 
     return (
@@ -22,9 +23,10 @@ const NavButton: React.FC<NavButtonProps> = ({ label, path }) => {
                     alignItems: 'center',
                     textTransform: 'none',
                     fontWeight: 600,
-                    color: '#34D399', // Green text color to match theme
+                    color: isActive ? '#ffffff' : '#34D399', // Active green for text
+                    backgroundColor: isActive ? '#2C9E77' : 'transparent', // Darker green for active
                     '&:hover': {
-                        backgroundColor: '#2C9E77', // Darker green for hover
+                        backgroundColor: isActive ? '#2C9E77' : '#4BC7D2', // Turquoise for hover if not active
                         transform: 'scale(1.05)',
                         color: '#ffffff', // White text on hover
                     },

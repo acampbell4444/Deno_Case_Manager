@@ -8,7 +8,7 @@ export const Transition = React.forwardRef(
                 direction="up"
                 ref={ref}
                 {...props}
-                timeout={{ enter: 400, exit: 400 }}
+                timeout={{ enter: 600, exit: 600 }}
                 easing={{ enter: "ease-in-out", exit: "ease-in-out" }}
             />
         );

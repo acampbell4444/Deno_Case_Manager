@@ -20,7 +20,6 @@ import HeroSection from "../components/HeroHeader.tsx";
 import NameTooltipAvatarAndIcon from "../components/NameTooltipAvatarAndIcon.tsx";
 import { fetchAndParseEmails } from "../thunks/emails.ts";
 import { filterEmailsByDate } from "../helpers/emails.ts";
-import GreenAvatarIcon from "../components/NameTooltipAvatarAndIcon.tsx";
 
 const EmailRecords = () => {
     const dispatch = useDispatch();
@@ -85,12 +84,12 @@ const EmailRecords = () => {
                         label="Date Range"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={MoreVertIcon}
                         tooltipTitle="Filter by column header in the table"
                         label="Filter"
                     />
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={ArrowUpwardIcon}
                         tooltipTitle="Sort by column header in the table"
                         label="Sort"

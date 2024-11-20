@@ -2,11 +2,11 @@ import React from "react";
 import { Avatar, Tooltip, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 
-interface GreenAvatarIconProps {
-    Icon: React.ElementType;
+interface NameTooltipAvatarAndIconProps {
+    Icon: React.ElementType
     iconSize?: number;
     tooltipTitle?: string;
-    label: string;
+    label?: string;
     highlightedLabel?: string;
 }
 
@@ -14,14 +14,14 @@ export const CoolGreenText = styled.div`
   color: #34D399;
 `;
 
-const GreenAvatarIcon = (
+const NameTooltipAvatarAndIcon: React.FC<NameTooltipAvatarAndIconProps> = (
     {
         Icon,
         iconSize = 20,
         tooltipTitle = "",
         label = "",
         highlightedLabel = "",
-    }: GreenAvatarIconProps,
+    }
 ) => (
     <Typography
         variant="h6"
@@ -74,4 +74,4 @@ const GreenAvatarIcon = (
     </Typography>
 );
 
-export default GreenAvatarIcon;
+export default NameTooltipAvatarAndIcon;

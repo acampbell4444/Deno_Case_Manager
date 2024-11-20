@@ -24,7 +24,7 @@ import {
 import HeroSection from "../components/HeroHeader.tsx";
 import moment from "moment";
 import Papa from "papaparse";
-import GreenAvatarIcon from "../components/NameTooltipAvatarAndIcon.tsx";
+import NameTooltipAvatarAndIcon from "../components/NameTooltipAvatarAndIcon.tsx";
 
 const TextRecords = () => {
     const dispatch = useDispatch();
@@ -136,7 +136,7 @@ const TextRecords = () => {
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             <HeroSection>
                 <Stack direction="row" spacing={2} justifyContent="center">
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={SmsIcon}
                         tooltipTitle="Text Records"
                         label="Text Records"
@@ -150,19 +150,19 @@ const TextRecords = () => {
                     justifyContent="center"
                     sx={{ marginTop: 2 }}
                 >
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={DateRangeIcon}
                         tooltipTitle="Filter by date range"
                         label="Date Range"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={MoreVertIcon}
                         tooltipTitle="Filter by column header in the table"
                         label="Filter"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={ArrowUpwardIcon}
                         tooltipTitle="Sort by column header in the table"
                         label="Sort"

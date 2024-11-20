@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  Box, Button, Dialog, Stack } from "@mui/material";
+import { Box, Button, Dialog, Stack } from "@mui/material";
 import { Transition } from "../../components/Transition.tsx";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -10,6 +10,7 @@ import {
     Edit as EditIcon,
     MoreVert as MoreVertIcon,
     Visibility as VisibilityIcon,
+    ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import HeroSection from "../../components/HeroHeader.tsx";
@@ -26,20 +27,13 @@ import {
     useGetEvidenceByBookIdQuery,
     useLazyGetEvidenceByBookIdQuery,
 } from "../../services/evidence.ts";
-import { useParams } from "react-router-dom";
-import GreenAvatarIcon from "../../components/NameTooltipAvatarAndIcon.tsx";
-
-interface EvidenceRecord {
-    id: string;
-    name: string;
-    subject: string;
-    fileName: string;
-    date: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import NameTooltipAvatarAndIcon from "../../components/NameTooltipAvatarAndIcon.tsx";
 
 const EvidenceDataGrid = () => {
     const dispatch = useDispatch();
     const params = useParams();
+    const navigate = useNavigate()
 
     // Constants
     const EVIDENCE_BOOK_ID = params.id || "";
@@ -83,7 +77,7 @@ const EvidenceDataGrid = () => {
     const handleCreateOrEditFormDialogViewToggle = (
         open: boolean,
         type = "create",
-        row: EvidenceRecord | null = null,
+        row: any = null,
     ) => {
         dispatch(setCombinedInitialState({ createOrEditDialogOpen: open }));
         dispatch(
@@ -99,11 +93,15 @@ const EvidenceDataGrid = () => {
         handleCreateOrEditFormDialogViewToggle(true, "edit", row);
     };
 
+    console.log('data', data);  
+
+    // const evidence_book_id = EVIDENCE_BOOK_ID;
+
     return (
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             <HeroSection>
                 <Stack direction="row" spacing={2} justifyContent="center">
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={DateRangeIcon}
                         tooltipTitle="Filter by date range"
                         label="Evidence Records for "
@@ -112,43 +110,51 @@ const EvidenceDataGrid = () => {
                     />
                 </Stack>
 
+                <div style={{ position: "absolute", top: 20, left: 20 }} onClick={() => navigate('/evidence_books')}>
+                    <NameTooltipAvatarAndIcon
+                        Icon={ArrowBackIcon}
+                        tooltipTitle="Go back to all evidence books"
+                        label="Back"
+                    />
+                </div>
+
                 <Stack
                     direction="row"
                     spacing={2}
                     justifyContent="center"
                     sx={{ marginTop: 2 }}
                 >
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={AddIcon}
                         tooltipTitle="Create a new evidence record"
                         label="Create"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={EditIcon}
                         tooltipTitle="Edit an existing evidence record"
                         label="Edit"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={DeleteIcon}
                         tooltipTitle="Delete an existing evidence record"
                         label="Delete"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={VisibilityIcon}
                         tooltipTitle="View an existing evidence record"
                         label="View"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={MoreVertIcon}
                         tooltipTitle="Filter by column header in the table"
                         label="Filter"
                     />
 
-                    <GreenAvatarIcon
+                    <NameTooltipAvatarAndIcon
                         Icon={ArrowUpwardIcon}
                         tooltipTitle="Sort by column header in the table"
                         label="Sort"

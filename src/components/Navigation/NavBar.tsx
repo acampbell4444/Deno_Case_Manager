@@ -12,9 +12,11 @@ import {
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import NavButton from "./NavButton.tsx";
+import { useLocation } from "react-router-dom";
 
 const NavBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const location = useLocation(); // Use this to get the current route
 
     const isMobile = useMediaQuery((theme: any) =>
         theme.breakpoints.down("md")
@@ -30,6 +32,7 @@ const NavBar = () => {
                 boxShadow: 4,
                 padding: "0 20px",
                 color: "#ffffff", // Light text color
+                height: 100,
             }}
         >
             <Toolbar
@@ -43,7 +46,7 @@ const NavBar = () => {
                     component="img"
                     src="/CroppedLogo.png"
                     alt="App Logo"
-                    sx={{ height: 70, width: "auto", marginRight: 2 }}
+                    sx={{ height: 90, width: "auto", marginRight: 2 }}
                 />
 
                 <Typography
@@ -67,29 +70,12 @@ const NavBar = () => {
                     )
                     : (
                         <Box sx={{ display: "flex" }}>
-                            <NavButton label="Home" path="/" />
-
-                            <NavButton
-                                label="Arguments"
-                                path="/arguments"
-                            />
-
-                            <NavButton
-                                label="Evidence"
-                                path="/evidence_books"
-                            />
-                            
-                            <NavButton
-                                label="Emails"
-                                path="/email_records"
-                            />
-
-                            <NavButton
-                                label="Texts"
-                                path="/text_records"
-                            />
-
-                            <NavButton label="AI" path="/open_ai" />
+                            <NavButton label="Home" path="/" isActive={location.pathname === '/'} />
+                            <NavButton label="Arguments" path="/arguments" isActive={location.pathname === '/arguments'} />
+                            <NavButton label="Evidence" path="/evidence_books" isActive={location.pathname === '/evidence_books'} />
+                            <NavButton label="Emails" path="/email_records" isActive={location.pathname === '/email_records'} />
+                            <NavButton label="Texts" path="/text_records" isActive={location.pathname === '/text_records'} />
+                            <NavButton label="AI" path="/open_ai" isActive={location.pathname === '/open_ai'} />
                         </Box>
                     )}
 
@@ -108,39 +94,27 @@ const NavBar = () => {
                 >
                     <List>
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton label="Home" path="/" />
+                            <NavButton label="Home" path="/" isActive={location.pathname === '/'} />
                         </ListItem>
 
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton
-                                label="Arguments"
-                                path="/arguments"
-                            />
+                            <NavButton label="Arguments" path="/arguments" isActive={location.pathname === '/arguments'} />
                         </ListItem>
 
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton
-                                label="Evidence"
-                                path="/evidence_books"
-                            />
+                            <NavButton label="Evidence" path="/evidence_books" isActive={location.pathname === '/evidence_books'} />
                         </ListItem>
 
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton
-                                label="Emails"
-                                path="/email_records"
-                            />
+                            <NavButton label="Emails" path="/email_records" isActive={location.pathname === '/email_records'} />
                         </ListItem>
 
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton
-                                label="Texts"
-                                path="/text_records"
-                            />
+                            <NavButton label="Texts" path="/text_records" isActive={location.pathname === '/text_records'} />
                         </ListItem>
 
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton label="Open AI" path="/open_ai" />
+                            <NavButton label="Open AI" path="/open_ai" isActive={location.pathname === '/open_ai'} />
                         </ListItem>
                     </List>
                 </Drawer>
