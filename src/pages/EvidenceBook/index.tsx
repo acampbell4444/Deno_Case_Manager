@@ -8,13 +8,14 @@ import {
     Grid,
     IconButton,
     Stack,
-    Tooltip,
+    TextField,
     Typography,
 } from "@mui/material";
 import {
     Add,
     ArrowBack as ArrowBackIcon,
     LibraryBooks as LibraryBooksIcon,
+    Search as SearchIcon,
     Visibility,
 } from "@mui/icons-material";
 import { useGetEvidenceBooksByUserIdQuery } from "../../services/evidence.ts";
@@ -33,16 +34,19 @@ const EvidenceBook = () => {
         setSearch(event.target.value);
     };
 
+    const filteredData = data.filter((journal: any) => {
+        return journal.title.toLowerCase().includes(search.toLowerCase());
+    });
+
     return (
         <>
             <HeroSection>
                 <Stack>
-        
                     {/* Main header with icon and label */}
                     <Stack direction="row" spacing={2} justifyContent="center">
                         <NameTooltipAvatarAndIcon
                             Icon={LibraryBooksIcon}
-                            tooltipTitle="Each book is a collection of individual pieces of evidence"
+                            tooltipTitle="Evidence Books"
                             label="Evidence Books"
                             iconSize={34}
                         />
@@ -57,15 +61,57 @@ const EvidenceBook = () => {
                     >
                         <NameTooltipAvatarAndIcon
                             Icon={Visibility}
-                            tooltipTitle="View"
+                            tooltipTitle="Each book is a collection of individual pieces of evidence"
                             label="View"
-                            // iconSize={34}
+                        />
+
+                        <NameTooltipAvatarAndIcon
+                            Icon={SearchIcon}
+                            tooltipTitle="Search"
+                            label="Search"
                         />
                     </Stack>
                 </Stack>
             </HeroSection>{" "}
             <div style={{ backgroundColor: "", minHeight: "100vh" }}>
                 {/* Lighten background a bit, keeping the dark theme */}
+
+                <TextField
+                    label="Search"
+                    variant="outlined"
+                    fullWidth
+                    value={search}
+                    onChange={handleSearchChange}
+                    InputProps={{
+                        startAdornment: <SearchIcon />,
+                    }}
+                    sx={{
+                        marginBottom: "20px",
+                        backgroundColor: "#2A2A2A", // Light charcoal background
+                        borderRadius: "4px", // Optional: make it more rounded
+                        "& .MuiInputBase-root": {
+                            color: "#34D399", // Turquoise text color
+                        },
+                        "& .MuiInputLabel-root": {
+                            color: "#34D399", // Turquoise label
+                            opacity: 0.7, // Makes the label slightly transparent when not focused
+                        },
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                                borderColor: "#34D399", // Turquoise border color
+                            },
+                            "&:hover fieldset": {
+                                borderColor: "#34D399", // Border color when hovered
+                            },
+                            "&.Mui-focused fieldset": {
+                                borderColor: "#34D399", // Focused border color
+                            },
+                        },
+                        "& .Mui-focused .MuiInputLabel-root": {
+                            opacity: 1, // Make the label fully visible when focused
+                        },
+                    }}
+                />
 
                 <Container
                     maxWidth="lg" // Increase maxWidth to make the cards wider
@@ -79,12 +125,22 @@ const EvidenceBook = () => {
                 >
                     {/* Evidence cards grid */}
                     <Grid container spacing={3}>
-                        {data
-                            .filter((journal: any) =>
-                                journal.title.toLowerCase().includes(
-                                    search.toLowerCase(),
-                                )
-                            )
+                        {filteredData.length === 0 && (
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    position: "relative", // Position the text
+                                    color: "#B0B0B0", // Lighter gray text color
+                                    mt: 5, // Adjust margin-top for better alignment
+                                    textAlign: "center", // Center the text
+                                    fontWeight: 600, // Make it bold for better visibility
+                                }}
+                            >
+                                {`No evidence books found ${search ? "for the search term: " + `"${search}"` : ""}`}
+                            </Typography>
+                        )}
+
+                        {filteredData.length > 0 && (data
                             .map((journal: any) => (
                                 <Grid item xs={12} key={journal.id}>
                                     {/* This ensures that each card is always full-width */}
@@ -221,7 +277,7 @@ const EvidenceBook = () => {
                                         </CardContent>
                                     </Card>
                                 </Grid>
-                            ))}
+                            )))}
                     </Grid>
 
                     {/* Floating action button */}

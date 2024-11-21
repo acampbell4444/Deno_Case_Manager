@@ -1,7 +1,6 @@
 import { Application, Router } from "@oak/oak";
 import { oakCors } from "@tajpouria/cors";
 import routeStaticFilesFrom from "./routeStaticFilesFrom.ts";
-import { supabase } from "./supabase/client.ts";
 import {
   deleteEvidenceRecord,
   fetchAllEvidenceBooksByUserId,
@@ -9,8 +8,20 @@ import {
   uploadEvidenceFile,
   createEvidenceRecord,
 } from "./supabase/evidenceActions.ts";
+import { fetchAllArgumentsByUserId } from "./supabase/argumentsActions.ts";
 
 const router = new Router();
+
+//fetchAllArgumentByUserId
+router.get("/api/arguments/user/:user_id", async (context) => {
+  const userId = context.params.user_id;
+  if (!userId) {
+    context.response.status = 400;
+    context.response.body = { message: "user_id is required" };
+    return;
+  }
+  context.response.body = await fetchAllArgumentsByUserId(userId);
+});
 
 //evidence upload
 router.post("/api/evidence/upload", async (context) => {
@@ -28,8 +39,7 @@ router.post("/api/evidence/upload", async (context) => {
     return;
   }
   context.response.body = await uploadEvidenceFile(
-    { file, newFileName },
-    supabase,
+    { file, newFileName }
   );
 });
 
@@ -41,7 +51,7 @@ router.post("/api/evidence", async (context) => {
     context.response.body = { message: "newEntry is required" };
     return;
   }
-  context.response.body = await createEvidenceRecord(body, supabase);
+  context.response.body = await createEvidenceRecord(body);
 });
 
 //getEvidenceBooksByUserId
@@ -52,7 +62,7 @@ router.get("/api/evidence/user/:user_id", async (context) => {
     context.response.body = { message: "user_id is required" };
     return;
   }
-  context.response.body = await fetchAllEvidenceBooksByUserId(userId, supabase);
+  context.response.body = await fetchAllEvidenceBooksByUserId(userId);
 });
 
 //deleteEvidenceEntryById
@@ -73,7 +83,7 @@ router.delete("/api/evidence/:entryId", async (context) => {
   context.response.body = await deleteEvidenceRecord({
     id,
     fileName: body.fileName,
-  }, supabase);
+  });
 });
 
 //getEvidenceByBookId
@@ -84,7 +94,7 @@ router.get("/api/evidence/book/:evidence_book_id", async (context) => {
     context.response.body = { message: "evidence_book_id is required" };
     return;
   }
-  context.response.body = await fetchEvidenceByBookId(evidenceBookId, supabase);
+  context.response.body = await fetchEvidenceByBookId(evidenceBookId);
 });
 
 const app = new Application();

@@ -12,11 +12,10 @@ import Evidence from "./pages/Evidence/index.tsx";
 import EvidenceBooks from "./pages/EvidenceBook/index.tsx";
 import EmailRecordsPage from "./pages/EmailRecords.tsx";
 import TextRecordsPage from "./pages/TextRecords.tsx";
-import Arguments from "./pages/Arguments/index.tsx";
+import ArgumentsList from "./pages/ArgumentsList/index.tsx";
+import Argument from "./pages/Argument/index.tsx";
 // import OpenAIComponent from "./pages/OpenAi/index.tsx";
 
-// Define the type for the custom theme function
-// export const getTheme = () => createTheme(theme);
 
 const RoutesIndex: React.FC = () => {
   return (
@@ -27,7 +26,9 @@ const RoutesIndex: React.FC = () => {
             <NavBar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/arguments" element={<Arguments />} />
+              
+              <Route path="/arguments" element={<ArgumentsList />} />
+              <Route path="/argument/:id" element={<Argument />} />
               <Route path="/evidence_books" element={<EvidenceBooks />} />
               <Route path="/evidence_books/:id" element={<Evidence />} />
               <Route path="/email_records" element={<EmailRecordsPage />} />
