@@ -5,6 +5,7 @@ import evidenceReducer from '../slices/evidence.ts';
 // import openAiApi from './openAi/apiSlice.ts';
 import evidenceApi from './evidence.ts';
 import argumentsApi from './arguments.ts';
+import claudeApi from './claude.ts';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     // openAiApi: openAiApi.reducer,
     [evidenceApi.reducerPath]: evidenceApi.reducer,
     [argumentsApi.reducerPath]: argumentsApi.reducer,
+    [claudeApi.reducerPath]: claudeApi.reducer,
  
   },
   middleware: (getDefaultMiddleware: any) =>
@@ -22,5 +24,6 @@ export const store = configureStore({
       // openAiApi.middleware,
       evidenceApi.middleware,
       argumentsApi.middleware,
+      claudeApi.middleware,
     ),
 });

@@ -2,15 +2,54 @@ import { Application, Router } from "@oak/oak";
 import { oakCors } from "@tajpouria/cors";
 import routeStaticFilesFrom from "./routeStaticFilesFrom.ts";
 import {
+  createEvidenceRecord,
   deleteEvidenceRecord,
   fetchAllEvidenceBooksByUserId,
   fetchEvidenceByBookId,
   uploadEvidenceFile,
-  createEvidenceRecord,
 } from "./supabase/evidenceActions.ts";
+import {  generateLegalAnalysis } from "./supabase/claudeActions.ts";
 import { fetchAllArgumentsByUserId } from "./supabase/argumentsActions.ts";
+// import { hardcodedCaseData } from "./supabase/claudeActions.ts";
+
+const hardcodedAnalysis = {
+  summary: "This case involves a contract dispute between two software companies over licensing terms and intellectual property rights. The plaintiff alleges breach of contract and unauthorized use of proprietary code.",
+  keyPoints: [
+    "Contract was signed in January 2023",
+    "Disputed code usage occurred between March-June 2023",
+    "Damages claimed: $500,000",
+    "Prior business relationship existed for 3 years",
+    "Multiple written warnings were issued"
+  ],
+  recommendations: [
+    "Pursue mediation before litigation",
+    "Gather all email correspondence from 2023",
+    "Review code repository access logs",
+    "Document all instances of unauthorized use",
+    "Consider seeking injunctive relief"
+  ]
+};
 
 const router = new Router();
+
+//generateLegalAnalysis
+router.post("/api/claude", async (ctx) => {
+  try {
+    ctx.response.body = {
+      success: true,
+      data: hardcodedAnalysis
+    };
+    ctx.response.status = 200;
+  } catch (error) {
+    console.error("Error:", error);
+    ctx.response.body = {
+      success: false,
+      error: "Failed to retrieve analysis",
+      details: error instanceof Error ? error.message : "Unknown error occurred"
+    };
+    ctx.response.status = 500;
+  }
+});
 
 //fetchAllArgumentByUserId
 router.get("/api/arguments/user/:user_id", async (context) => {
@@ -39,7 +78,7 @@ router.post("/api/evidence/upload", async (context) => {
     return;
   }
   context.response.body = await uploadEvidenceFile(
-    { file, newFileName }
+    { file, newFileName },
   );
 });
 

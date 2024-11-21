@@ -75,7 +75,7 @@ const NavBar = () => {
                             <NavButton label="Evidence" path="/evidence_books" isActive={location.pathname === '/evidence_books'} />
                             <NavButton label="Emails" path="/email_records" isActive={location.pathname === '/email_records'} />
                             <NavButton label="Texts" path="/text_records" isActive={location.pathname === '/text_records'} />
-                            <NavButton label="AI" path="/open_ai" isActive={location.pathname === '/open_ai'} />
+                            <NavButton label="Claude" path="/claude" isActive={location.pathname === '/claude'} />
                         </Box>
                     )}
 
@@ -114,7 +114,7 @@ const NavBar = () => {
                         </ListItem>
 
                         <ListItem component="div" onClick={handleDrawerToggle}>
-                            <NavButton label="Open AI" path="/open_ai" isActive={location.pathname === '/open_ai'} />
+                            <NavButton label="Claude" path="/claude" isActive={location.pathname === '/claude'} />
                         </ListItem>
                     </List>
                 </Drawer>

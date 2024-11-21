@@ -14,6 +14,7 @@ import EmailRecordsPage from "./pages/EmailRecords.tsx";
 import TextRecordsPage from "./pages/TextRecords.tsx";
 import ArgumentsList from "./pages/ArgumentsList/index.tsx";
 import Argument from "./pages/Argument/index.tsx";
+import Claude from "./pages/Claude/index.tsx";
 // import OpenAIComponent from "./pages/OpenAi/index.tsx";
 
 
@@ -29,6 +30,7 @@ const RoutesIndex: React.FC = () => {
               
               <Route path="/arguments" element={<ArgumentsList />} />
               <Route path="/argument/:id" element={<Argument />} />
+              <Route path="/claude" element={<Claude />} />
               <Route path="/evidence_books" element={<EvidenceBooks />} />
               <Route path="/evidence_books/:id" element={<Evidence />} />
               <Route path="/email_records" element={<EmailRecordsPage />} />
