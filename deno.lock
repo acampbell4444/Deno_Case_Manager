@@ -37,6 +37,7 @@
     "npm:eslint-plugin-react-refresh@~0.4.14": "0.4.14_eslint@9.15.0",
     "npm:eslint@^9.13.0": "9.15.0",
     "npm:globals@^15.11.0": "15.12.0",
+    "npm:json2csv@^6.0.0-alpha.2": "6.0.0-alpha.2",
     "npm:moment@^2.30.1": "2.30.1",
     "npm:mui-rff@^8.0.1": "8.0.1_@emotion+react@11.13.3__react@18.3.1_@emotion+styled@11.13.0__@emotion+react@11.13.3___react@18.3.1__react@18.3.1_@mui+material@6.1.7__@emotion+react@11.13.3___react@18.3.1__@emotion+styled@11.13.0___@emotion+react@11.13.3____react@18.3.1___react@18.3.1__@types+react@18.3.12__react@18.3.1__react-dom@18.3.1___react@18.3.1_@mui+system@6.1.7__@emotion+react@11.13.3___react@18.3.1__@emotion+styled@11.13.0___@emotion+react@11.13.3____react@18.3.1___react@18.3.1__@types+react@18.3.12__react@18.3.1_@mui+x-date-pickers@7.22.2__@emotion+react@11.13.3___react@18.3.1__@emotion+styled@11.13.0___@emotion+react@11.13.3____react@18.3.1___react@18.3.1__@mui+material@6.1.7___@emotion+react@11.13.3____react@18.3.1___@emotion+styled@11.13.0____@emotion+react@11.13.3_____react@18.3.1____react@18.3.1___@types+react@18.3.12___react@18.3.1___react-dom@18.3.1____react@18.3.1__@mui+system@6.1.7___@emotion+react@11.13.3____react@18.3.1___@emotion+styled@11.13.0____@emotion+react@11.13.3_____react@18.3.1____react@18.3.1___@types+react@18.3.12___react@18.3.1__dayjs@1.11.13__moment@2.30.1__react@18.3.1__react-dom@18.3.1___react@18.3.1__@types+react@18.3.12__date-fns@2.30.0_final-form@4.20.10_react@18.3.1_react-final-form@6.5.9__final-form@4.20.10__react@18.3.1_date-fns@2.30.0_@types+react@18.3.12_react-dom@18.3.1__react@18.3.1_dayjs@1.11.13_moment@2.30.1",
     "npm:papaparse@^5.4.1": "5.4.1",
@@ -843,6 +844,9 @@
     "@rollup/rollup-win32-x64-msvc@4.27.2": {
       "integrity": "sha512-foJM5vv+z2KQmn7emYdDLyTbkoO5bkHZE1oth2tWbQNGW7mX32d46Hz6T0MqXdWS2vBZhaEtHqdy9WYwGfiliA=="
     },
+    "@streamparser/json@0.0.6": {
+      "integrity": "sha512-vL9EVn/v+OhZ+Wcs6O4iKE9EUpwHUqHmCtNUMWjqp+6dr85+XPOSGTEsqYNq1Vn04uk9SWlOVmx9J48ggJVT2Q=="
+    },
     "@supabase/auth-js@2.65.1": {
       "integrity": "sha512-IA7i2Xq2SWNCNMKxwmPlHafBQda0qtnFr8QnyyBr+KaSxoXXqEzFCnQ1dGTy6bsZjVBgXu++o3qrDypTspaAPw==",
       "dependencies": [
@@ -1182,6 +1186,9 @@
       "dependencies": [
         "delayed-stream"
       ]
+    },
+    "commander@6.2.1": {
+      "integrity": "sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA=="
     },
     "concat-map@0.0.1": {
       "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="
@@ -1576,6 +1583,14 @@
     "json-stable-stringify-without-jsonify@1.0.1": {
       "integrity": "sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw=="
     },
+    "json2csv@6.0.0-alpha.2": {
+      "integrity": "sha512-nJ3oP6QxN8z69IT1HmrJdfVxhU1kLTBVgMfRnNZc37YEY+jZ4nU27rBGxT4vaqM/KUCavLRhntmTuBFqZLBUcA==",
+      "dependencies": [
+        "@streamparser/json",
+        "commander",
+        "lodash.get"
+      ]
+    },
     "json5@2.2.3": {
       "integrity": "sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg=="
     },
@@ -1600,6 +1615,9 @@
       "dependencies": [
         "p-locate"
       ]
+    },
+    "lodash.get@4.4.2": {
+      "integrity": "sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ=="
     },
     "lodash.merge@4.6.2": {
       "integrity": "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="
@@ -2108,6 +2126,7 @@
         "npm:eslint-plugin-react-refresh@~0.4.14",
         "npm:eslint@^9.13.0",
         "npm:globals@^15.11.0",
+        "npm:json2csv@^6.0.0-alpha.2",
         "npm:moment@^2.30.1",
         "npm:mui-rff@^8.0.1",
         "npm:papaparse@^5.4.1",

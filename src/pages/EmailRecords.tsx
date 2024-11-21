@@ -20,6 +20,7 @@ import HeroSection from "../components/HeroHeader.tsx";
 import NameTooltipAvatarAndIcon from "../components/NameTooltipAvatarAndIcon.tsx";
 import { fetchAndParseEmails } from "../thunks/emails.ts";
 import { filterEmailsByDate } from "../helpers/emails.ts";
+import { setCaseDataOverview } from "../slices/claude.ts";
 
 const EmailRecords = () => {
     const dispatch = useDispatch();
@@ -32,6 +33,8 @@ const EmailRecords = () => {
             (dispatch as any)(fetchAndParseEmails());
         }
     }, [dispatch, parsedEmails, loading, parsing]);
+
+    const [selectedRows, setSelectedRows] = React.useState<any[]>([]);
 
     const emailsFilteredByDate = filterEmailsByDate(
         parsedEmails,
@@ -60,6 +63,44 @@ const EmailRecords = () => {
         },
         { field: "text", headerName: "Text", width: 800 },
     ];
+
+    // Function to copy selected rows as stringified JSON to clipboard
+    const handleCopyJson = () => {
+        console.log('selectedRows', selectedRows);  
+        // const selectedRows = emailsFilteredByDate.filter((email: any) => email.selected);
+
+        const jsonString = JSON.stringify(selectedRows, null, 2);
+        (navigator as any).clipboard.writeText(jsonString).then(() => {
+            alert("Selected rows copied to clipboard as JSON!");
+        }).catch((err:any) => {
+            alert("Failed to copy text: ");
+        });
+    };
+
+    // Function to copy selected rows as CSV to clipboard
+    const handleCopyCsv = () => {
+        const selectedRows = emailsFilteredByDate.filter((email: any) => email.selected);
+        
+        // Generate CSV from selected rows
+        const header = ["ID", "Subject", "From", "To", "Date", "Text"];
+        const csvRows = selectedRows.map((row: any) => [
+            row.id,
+            row.subject,
+            row.from,
+            row.to,
+            moment(row.date).format("MM/DD/YYYY hh:mm A"),
+            row.text,
+        ]);
+
+        // Join header and rows into CSV format
+        const csvString = [header.join(","), ...csvRows.map(row => row.join(","))].join("\n");
+
+        (navigator as any).clipboard.writeText(csvString).then(() => {
+            alert("Selected rows copied to clipboard as CSV!");
+        })
+
+          
+    };
 
     return (
         <>
@@ -151,6 +192,35 @@ const EmailRecords = () => {
                 >
                     Clear date range
                 </Button>
+
+                {/* Add Buttons for Exporting JSON and CSV */}
+                <Button
+                    sx={{
+                        marginLeft: "20px",
+                        backgroundColor: "#34D399", // Cool green
+                        color: "#ffffff",
+                        "&:hover": {
+                            backgroundColor: "#2c6e2f",
+                        },
+                    }}
+                    onClick={handleCopyJson}
+                >
+                    Copy JSON
+                </Button>
+
+                <Button
+                    sx={{
+                        marginLeft: "10px",
+                        backgroundColor: "#34D399", // Cool green
+                        color: "#ffffff",
+                        "&:hover": {
+                            backgroundColor: "#2c6e2f",
+                        },
+                    }}
+                    onClick={handleCopyCsv}
+                >
+                    Copy CSV
+                </Button>
             </div>
 
             <Box sx={{ height: "100vh", width: "100%" }}>
@@ -159,6 +229,18 @@ const EmailRecords = () => {
                     columns={columns}
                     getRowHeight={() => "auto"}
                     loading={loading || parsing}
+                    checkboxSelection
+                    onRowSelectionModelChange={(newSelection: any) => {
+                        // Update rows with selected flag when rows are selected
+                        console.log('newSelection', newSelection);
+                        console.log('emailsFilteredByDate', emailsFilteredByDate);
+                        const updatedRows = emailsFilteredByDate.filter(
+                            (email: any) => newSelection.includes(+email.id),
+                        )
+                        setSelectedRows(updatedRows);
+                        // Assuming dispatch to update selection is needed
+                        dispatch(setCaseDataOverview(JSON.stringify(updatedRows, null, 2)));
+                    }}
                 />
             </Box>
         </>

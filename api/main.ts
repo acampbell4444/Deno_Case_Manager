@@ -34,11 +34,9 @@ const router = new Router();
 
 //generateLegalAnalysis
 router.post("/api/claude", async (ctx) => {
+  const prompt = await ctx.request.body.text()
   try {
-    ctx.response.body = {
-      success: true,
-      data: hardcodedAnalysis
-    };
+    ctx.response.body = JSON.stringify(await generateLegalAnalysis(prompt))
     ctx.response.status = 200;
   } catch (error) {
     console.error("Error:", error);
