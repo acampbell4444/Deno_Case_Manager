@@ -17,7 +17,7 @@ export const CoolGreenText = styled.div`
 const NameTooltipAvatarAndIcon: React.FC<NameTooltipAvatarAndIconProps> = (
     {
         Icon,
-        iconSize = 20,
+        iconSize = 16,
         tooltipTitle = "",
         label = "",
         highlightedLabel = "",
@@ -66,6 +66,7 @@ const NameTooltipAvatarAndIcon: React.FC<NameTooltipAvatarAndIconProps> = (
                     ml: 1,
                     fontWeight: "bold",
                     fontSize: iconSize,
+                    zIndex: 1,
                 }}
             >
                 {highlightedLabel}

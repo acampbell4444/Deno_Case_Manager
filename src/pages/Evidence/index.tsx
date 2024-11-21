@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, Stack } from "@mui/material";
+import { Box, Button, Dialog, Stack, Fab } from "@mui/material";
 import { Transition } from "../../components/Transition.tsx";
 import { DataGrid } from "@mui/x-data-grid";
 import {
     Add as AddIcon,
+    ArrowBack as ArrowBackIcon,
     ArrowUpward as ArrowUpwardIcon,
     DateRange as DateRangeIcon,
     Delete as DeleteIcon,
     Edit as EditIcon,
     MoreVert as MoreVertIcon,
     Visibility as VisibilityIcon,
-    ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import HeroSection from "../../components/HeroHeader.tsx";
@@ -33,7 +33,7 @@ import NameTooltipAvatarAndIcon from "../../components/NameTooltipAvatarAndIcon.
 const EvidenceDataGrid = () => {
     const dispatch = useDispatch();
     const params = useParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     // Constants
     const EVIDENCE_BOOK_ID = params.id || "";
@@ -93,7 +93,7 @@ const EvidenceDataGrid = () => {
         handleCreateOrEditFormDialogViewToggle(true, "edit", row);
     };
 
-    console.log('data', data);  
+    console.log("data", data);
 
     // const evidence_book_id = EVIDENCE_BOOK_ID;
 
@@ -110,7 +110,10 @@ const EvidenceDataGrid = () => {
                     />
                 </Stack>
 
-                <div style={{ position: "absolute", top: 20, left: 20 }} onClick={() => navigate('/evidence_books')}>
+                <div
+                    style={{ position: "absolute", top: 20, left: 20 }}
+                    onClick={() => navigate("/evidence_books")}
+                >
                     <NameTooltipAvatarAndIcon
                         Icon={ArrowBackIcon}
                         tooltipTitle="Go back to all evidence books"
@@ -163,36 +166,6 @@ const EvidenceDataGrid = () => {
             </HeroSection>
 
             <Box sx={{ width: "100%", textAlign: "center", mb: 2, mt: 2 }}>
-                <Button
-                    variant="outlined"
-                    onClick={() =>
-                        handleCreateOrEditFormDialogViewToggle(true, "create")}
-                    sx={{
-                        borderColor: "#34D399", // Green border color
-                        color: "#34D399", // Green text color
-                        borderRadius: "8px",
-                        padding: "12px 16px",
-                        textTransform: "none",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                        "&:hover": {
-                            backgroundColor: "#34D399", // Green background on hover
-                            color: "#ffffff", // White text on hover
-                            borderColor: "#34D399", // Keep green border on hover
-                        },
-                        "&.Mui-disabled": {
-                            color: "#34D399", // Green text on disabled state
-                            borderColor: "#555", // Lighter dark border for disabled state
-                            backgroundColor: "#222", // Dark background for disabled state
-                            opacity: 0.6, // Reduced opacity on disabled
-                        },
-                        transition: "all 0.3s ease",
-                    }}
-                >
-                    <AddIcon sx={{ marginRight: 1 }} />
-                    Create New Evidence Record
-                </Button>
             </Box>
 
             <Box
@@ -240,6 +213,20 @@ const EvidenceDataGrid = () => {
             >
                 <DisplayEvidenceDialog />
             </Dialog>
+
+            <Fab
+                color="primary"
+                aria-label="add evidence"
+                sx={{
+                    position: "fixed",
+                    bottom: 20,
+                    right: 20,
+                    backgroundColor: "#34D399",
+                }}
+                onClick={() => handleCreateOrEditFormDialogViewToggle(true, "create")}
+            >
+                <AddIcon />
+            </Fab>
         </Box>
     );
 };
