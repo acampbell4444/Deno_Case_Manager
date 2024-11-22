@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCaseDataOverview,  setDetailedBackground, setDetailedAnalysisRequest, setResponseInstructions } from "../../slices/claude.ts";
 import { useGenerateLegalAnalysisMutation } from "../../services/claude.ts";
-import { fakeConversation1 } from "./dataSeeds.ts";
 import { Button, CircularProgress, Stack, TextField } from "@mui/material";
 import HeroSection from "../../components/HeroHeader.tsx";
 import NameTooltipAvatarAndIcon from "../../components/NameTooltipAvatarAndIcon.tsx";
@@ -11,7 +10,6 @@ import {
 } from "@mui/icons-material";
 import CustomTextField from "./textFields.tsx";
 
-const stringifiedConversation = JSON.stringify(fakeConversation1);
 
 const getPrompt = (caseDataOverview: string, detailedBackground: string, detailedAnalysisRequest: string, responseInstructions: string) => {
     return `Perform a comprehensive legal analysis of this family law case data.
@@ -29,46 +27,6 @@ const getPrompt = (caseDataOverview: string, detailedBackground: string, detaile
     ${responseInstructions}`;
 }
 
-
-
-
-
-
-
-
-
-
-  const strng =  `Perform a comprehensive legal analysis of this family law case data.
-
-IMPORTANT: Your entire response MUST be a valid JSON object with these exact keys:
-{
-"summary": "Concise case summary (string)",
-"keyInsights": ["Insight 1", "Insight 2"],
-"recommendedActions": ["Action 1", "Action 2"]
-}
-
-Case Data Overview:
-${stringifiedConversation}
-
-Detailed Background:
-Emails indicate ongoing communication about child custody and visitation.
-Text messages suggest communication challenges between parties.
-Evidence includes communication records and financial documents.
-Current argument focuses on joint legal custody with primary physical custody.
-
-Detailed Analysis Request:
-1. Provide a concise summary of the case dynamics
-2. Identify key legal considerations in this custody scenario
-3. Suggest potential strategic actions for resolution
-4. Highlight communication and documentary evidence implications
-
-Response Instructions:
-- Use clear, professional legal language
-- Focus on objective case assessment
-- Ensure your ENTIRE response is a valid JSON object
-- Do NOT include any text outside of the JSON
-- Use proper JSON syntax with escaped quotes if needed`;
-
 interface AnalysisResult {
     summary: string;
     keyInsights: string[];
@@ -85,8 +43,6 @@ const Claude: React.FC = () => {
         : null;
 
     const { caseDataOverview, detailedBackground, detailedAnalysisRequest, responseInstructions } = useSelector((state: any) => state.claude);
-
-    console.log(caseDataOverview, detailedBackground, detailedAnalysisRequest, responseInstructions);
 
     // Handle field changes with Redux dispatch
     const handleCaseDataOverviewChange = (e: React.ChangeEvent<any>) => {

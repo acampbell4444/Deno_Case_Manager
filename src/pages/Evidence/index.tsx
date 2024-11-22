@@ -93,7 +93,11 @@ const EvidenceDataGrid = () => {
         handleCreateOrEditFormDialogViewToggle(true, "edit", row);
     };
 
-    console.log("data", data);
+    const dataSortedByDateOfEvent = [...data].sort(
+        (a: any, b: any) => new Date(b.date_of_event).getTime() - new Date(a.date_of_event).getTime()
+    );
+
+
 
     // const evidence_book_id = EVIDENCE_BOOK_ID;
 
@@ -177,7 +181,7 @@ const EvidenceDataGrid = () => {
                 }}
             >
                 <DataGrid
-                    rows={data || []}
+                    rows={dataSortedByDateOfEvent}
                     columns={getEvidenceDataGridColumns({
                         handleDisplayEvidenceDialogViewToggle,
                         handleDeleteEvidenceRecord,

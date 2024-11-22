@@ -19,8 +19,7 @@ export const generateLegalAnalysis = async (prompt: string ) => {
                 content: prompt,
             }],
         });
-        console.log('response:', response, 'typof:', typeof response);
-        return response
+         return response
     } catch (error) {
         if (error instanceof Error) {
             throw new Error(`Analysis generation failed: ${error.message}`);

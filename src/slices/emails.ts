@@ -3,7 +3,8 @@ import { fetchAndParseEmails } from '../thunks/emails.ts';
 
 // Define the type for the email state in the slice
 interface EmailState {
-  parsedEmails: any[]; // Replace `any` with the actual type for your emails if you have one
+  michelleParsedEmails: any[]; // Replace `any[]` with the actual type
+  cathyParsedEmails: any[]; // Replace `any[]` with the actual type
   loading: boolean;
   parsing: boolean;
   startDate: string | null;
@@ -11,7 +12,8 @@ interface EmailState {
 }
 
 const initialState: EmailState = {
-  parsedEmails: [],
+  michelleParsedEmails: [],
+  cathyParsedEmails: [],
   loading: false,
   parsing: false,
   startDate: null,
@@ -39,10 +41,11 @@ const emailSlice = createSlice({
         state.loading = true;
         state.parsing = true;
       })
-      .addCase(fetchAndParseEmails.fulfilled, (state, action: PayloadAction<any[]>) => { // Replace `any[]` with the actual type
+      .addCase(fetchAndParseEmails.fulfilled, (state, action: any) => { // Replace `any[]` with the actual type
         state.loading = false;
         state.parsing = false;
-        state.parsedEmails = action.payload;
+        state.michelleParsedEmails = action.payload.michelleParsedEmails
+        state.cathyParsedEmails = action.payload.cathyParsedEmails
       })
       .addCase(fetchAndParseEmails.rejected, (state) => {
         state.loading = false;

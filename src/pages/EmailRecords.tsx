@@ -1,20 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setEndDate, setStartDate } from "../slices/emails.ts";
-import {
-    Box,
-    Button,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import {
-    ArrowUpward as ArrowUpwardIcon,
-    DateRange as DateRangeIcon,
-    Email as EmailIcon,
-    MoreVert as MoreVertIcon,
-} from "@mui/icons-material";
+import { Box, Button, Stack, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
+import { Email as EmailIcon, DateRange as DateRangeIcon, MoreVert as MoreVertIcon } from "@mui/icons-material";
 import moment from "moment";
 import HeroSection from "../components/HeroHeader.tsx";
 import NameTooltipAvatarAndIcon from "../components/NameTooltipAvatarAndIcon.tsx";
@@ -22,27 +11,37 @@ import { fetchAndParseEmails } from "../thunks/emails.ts";
 import { filterEmailsByDate } from "../helpers/emails.ts";
 import { setCaseDataOverview } from "../slices/claude.ts";
 
+// Define the email type
+interface Email {
+    id: string;
+    subject: string;
+    from: string;
+    to: string;
+    date: string;
+    text: string;
+}
+
 const EmailRecords = () => {
-    const dispatch = useDispatch();
-    const { parsedEmails, loading, parsing, startDate, endDate } = useSelector((
-        state: any,
-    ) => state.email);
+    const dispatch = (useDispatch as any)();
+    const { cathyParsedEmails, michelleParsedEmails, loading, parsing, startDate, endDate } = useSelector((state: any) => state.email);
+    const [hasFetchedEmails, setHasFetchedEmails] = useState<boolean>(false);
+    const emailsState = useSelector((state: any) => state.email);
 
-    useEffect(() => {
-        if (!parsedEmails.length && !loading && !parsing) {
-            (dispatch as any)(fetchAndParseEmails());
-        }
-    }, [dispatch, parsedEmails, loading, parsing]);
+    const [selectedTab, setSelectedTab] = useState<number>(0);  // State to track selected tab
+    const [selectedRows, setSelectedRows] = useState<Email[]>([]);
 
-    const [selectedRows, setSelectedRows] = React.useState<any[]>([]);
 
-    const emailsFilteredByDate = filterEmailsByDate(
-        parsedEmails,
+
+    // Filter emails based on date
+    const emailsFilteredByDate: Email[] = filterEmailsByDate(
+        selectedTab === 0 ? michelleParsedEmails || [] : cathyParsedEmails || [],
         startDate,
-        endDate,
+        endDate
     );
 
-    const columns = [
+    const memoizedEmails = useMemo(() => emailsFilteredByDate, [emailsFilteredByDate]);
+
+    const columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 30 },
         { field: "subject", headerName: "Subject", width: 100 },
         { field: "from", headerName: "From", width: 100 },
@@ -64,23 +63,25 @@ const EmailRecords = () => {
         { field: "text", headerName: "Text", width: 800 },
     ];
 
+    // Handle Tab Change
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setSelectedTab(newValue);
+    };
+
     // Function to copy selected rows as stringified JSON to clipboard
     const handleCopyJson = () => {
-        console.log('selectedRows', selectedRows);  
-        // const selectedRows = emailsFilteredByDate.filter((email: any) => email.selected);
-
         const jsonString = JSON.stringify(selectedRows, null, 2);
         (navigator as any).clipboard.writeText(jsonString).then(() => {
             alert("Selected rows copied to clipboard as JSON!");
-        }).catch((err:any) => {
-            alert("Failed to copy text: ");
+        }).catch((err: any) => {
+            alert("Failed to copy text.");
         });
     };
 
     // Function to copy selected rows as CSV to clipboard
     const handleCopyCsv = () => {
         const selectedRows = emailsFilteredByDate.filter((email: any) => email.selected);
-        
+
         // Generate CSV from selected rows
         const header = ["ID", "Subject", "From", "To", "Date", "Text"];
         const csvRows = selectedRows.map((row: any) => [
@@ -97,10 +98,17 @@ const EmailRecords = () => {
 
         (navigator as any).clipboard.writeText(csvString).then(() => {
             alert("Selected rows copied to clipboard as CSV!");
-        })
-
-          
+        });
     };
+
+    useEffect(() => {
+        // if (!michelleEmails.length && !cathyEmails.length && !hasFetchedEmails) {
+        if (!memoizedEmails.length && !hasFetchedEmails) {
+            dispatch(fetchAndParseEmails());
+            setHasFetchedEmails(true);
+        }
+    }, [hasFetchedEmails, dispatch]);
+
 
     return (
         <>
@@ -113,45 +121,22 @@ const EmailRecords = () => {
                         iconSize={34}
                     />
                 </Stack>
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                    sx={{ marginTop: 2 }}
-                >
-                    <NameTooltipAvatarAndIcon
-                        Icon={DateRangeIcon}
-                        tooltipTitle="Filter by date range"
-                        label="Date Range"
-                    />
-
-                    <NameTooltipAvatarAndIcon
-                        Icon={MoreVertIcon}
-                        tooltipTitle="Filter by column header in the table"
-                        label="Filter"
-                    />
-                    <NameTooltipAvatarAndIcon
-                        Icon={ArrowUpwardIcon}
-                        tooltipTitle="Sort by column header in the table"
-                        label="Sort"
-                    />
-                </Stack>
             </HeroSection>
 
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "20px",
-                    marginTop: "30px",
-                }}
-            >
+            {/* Tabs for toggling between Michelle's and Cathy's emails */}
+            <Box sx={{ width: "100%" }}>
+                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Email Records Tabs">
+                    <Tab label="Emails from Michelle" />
+                    <Tab label="Emails from Cathy" />
+                </Tabs>
+            </Box>
+
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "20px", marginTop: "30px" }}>
                 <TextField
                     label="Start Date"
                     type="date"
                     value={moment(startDate).format("YYYY-MM-DD")}
-                    onChange={(e: any) =>
-                        dispatch(setStartDate(e.target.value))}
+                    onChange={(e: any) => dispatch(setStartDate(e.target.value))}
                     InputLabelProps={{ shrink: true }}
                     sx={{ mr: "10px" }}
                 />
@@ -172,16 +157,16 @@ const EmailRecords = () => {
                         size: "large",
                         variant: "contained",
                         marginLeft: "10px",
-                        backgroundColor: "#333", // Dark background
-                        color: "#34D399", // Green text color
+                        backgroundColor: "#333",
+                        color: "#34D399",
                         "&:hover": {
-                            backgroundColor: "#2C9E77", // Darker green background on hover
-                            color: "#ffffff", // White text on hover
+                            backgroundColor: "#2C9E77",
+                            color: "#ffffff",
                         },
                         "&.Mui-disabled": {
-                            color: "#34D399", // Green text on disabled state
-                            backgroundColor: "#555", // Lighter dark background for disabled state
-                            opacity: 0.6, // Reduced opacity on disabled
+                            color: "#34D399",
+                            backgroundColor: "#555",
+                            opacity: 0.6,
                         },
                     }}
                     disabled={loading || parsing || (!startDate && !endDate)}
@@ -193,11 +178,10 @@ const EmailRecords = () => {
                     Clear date range
                 </Button>
 
-                {/* Add Buttons for Exporting JSON and CSV */}
                 <Button
                     sx={{
                         marginLeft: "20px",
-                        backgroundColor: "#34D399", // Cool green
+                        backgroundColor: "#34D399",
                         color: "#ffffff",
                         "&:hover": {
                             backgroundColor: "#2c6e2f",
@@ -211,7 +195,7 @@ const EmailRecords = () => {
                 <Button
                     sx={{
                         marginLeft: "10px",
-                        backgroundColor: "#34D399", // Cool green
+                        backgroundColor: "#34D399",
                         color: "#ffffff",
                         "&:hover": {
                             backgroundColor: "#2c6e2f",
@@ -225,20 +209,16 @@ const EmailRecords = () => {
 
             <Box sx={{ height: "100vh", width: "100%" }}>
                 <DataGrid
-                    rows={emailsFilteredByDate}
+                    rows={memoizedEmails}
                     columns={columns}
                     getRowHeight={() => "auto"}
                     loading={loading || parsing}
                     checkboxSelection
                     onRowSelectionModelChange={(newSelection: any) => {
-                        // Update rows with selected flag when rows are selected
-                        console.log('newSelection', newSelection);
-                        console.log('emailsFilteredByDate', emailsFilteredByDate);
                         const updatedRows = emailsFilteredByDate.filter(
                             (email: any) => newSelection.includes(+email.id),
-                        )
+                        );
                         setSelectedRows(updatedRows);
-                        // Assuming dispatch to update selection is needed
                         dispatch(setCaseDataOverview(JSON.stringify(updatedRows, null, 2)));
                     }}
                 />
