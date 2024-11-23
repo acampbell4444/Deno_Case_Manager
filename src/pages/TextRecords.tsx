@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     setEndDate,
@@ -12,6 +12,8 @@ import {
     Button,
     Stack,
     TextField,
+    Tab,
+    Tabs,
     Typography,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -28,10 +30,11 @@ import NameTooltipAvatarAndIcon from "../components/NameTooltipAvatarAndIcon.tsx
 
 const TextRecords = () => {
     const dispatch = useDispatch();
+    const { parsedTexts, loading, parsing, startDate, endDate } = useSelector(
+        (state: any) => state.text
+    );
 
-    const { parsedTexts, loading, parsing, startDate, endDate } = useSelector((
-        state: any,
-    ) => state.text);
+    const [selectedTab, setSelectedTab] = useState<number>(0); // Track the selected tab
 
     // Fetch texts function
     const fetchTexts = async (): Promise<string> => {
@@ -56,16 +59,15 @@ const TextRecords = () => {
                         complete: (results: any) => {
                             const mappedTexts = results.data
                                 .filter((item: any) =>
-                                    Boolean(
-                                        item["Message Date"] && item["Text"],
-                                    )
+                                    Boolean(item["Message Date"] && item["Text"])
                                 )
                                 .map((item: any, index: number) => ({
                                     id: index,
                                     messageDate: item["Message Date"] || "N/A",
-                                    senderName: item["Type"] === "Outgoing"
-                                        ? "A Campbell"
-                                        : "M Rivet",
+                                    senderName:
+                                        item["Type"] === "Outgoing"
+                                            ? "A Campbell"
+                                            : "M Rivet",
                                     text: item["Text"] || "",
                                 }));
                             dispatch(setParsedTexts(mappedTexts));
@@ -74,10 +76,7 @@ const TextRecords = () => {
                         },
                     });
                 } catch (error) {
-                    console.error(
-                        "Error fetching or parsing text file:",
-                        error,
-                    );
+                    console.error("Error fetching or parsing text file:", error);
                 }
             };
 
@@ -85,25 +84,20 @@ const TextRecords = () => {
         }
     }, [dispatch, memoizedRowData.length, loading, parsing]);
 
-    const filteredTexts = memoizedRowData
-        .filter((text: any) => {
-            const formattedStartDate = startDate
-                ? moment(new Date(startDate)).unix()
-                : null;
-            const formattedEndDate = endDate
-                ? moment(new Date(endDate)).unix()
-                : null;
-            const textDate = moment(text.messageDate).unix();
-            if (
-                startDate && formattedStartDate !== null &&
-                formattedStartDate > textDate
-            ) return false;
-            if (
-                endDate && formattedEndDate !== null &&
-                formattedEndDate < textDate
-            ) return false;
-            return true;
-        });
+    const filteredTexts = memoizedRowData.filter((text: any) => {
+        const formattedStartDate = startDate ? moment(new Date(startDate)).unix() : null;
+        const formattedEndDate = endDate ? moment(new Date(endDate)).unix() : null;
+        const textDate = moment(text.messageDate).unix();
+        if (startDate && formattedStartDate !== null && formattedStartDate > textDate)
+            return false;
+        if (endDate && formattedEndDate !== null && formattedEndDate < textDate)
+            return false;
+        return true;
+    });
+
+    // Filter texts by tab selection (e.g., Michelle or Cathy)
+    
+    const textsByTab = selectedTab === 0 ? filteredTexts.filter((text:any) => text.senderName === 'M Rivet') : filteredTexts.filter((text:any) => text.senderName === 'A Campbell');
 
     const columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 100 },
@@ -129,11 +123,13 @@ const TextRecords = () => {
         { field: "text", headerName: "Text", width: 900, sortable: true },
     ];
 
-    console.log("loading", loading);
-    console.log("parsing", parsing);
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setSelectedTab(newValue);
+    };
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+            {/* Header Section */}
             <HeroSection>
                 <Stack direction="row" spacing={2} justifyContent="center">
                     <NameTooltipAvatarAndIcon
@@ -143,50 +139,24 @@ const TextRecords = () => {
                         iconSize={34}
                     />
                 </Stack>
-
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                    sx={{ marginTop: 2 }}
-                >
-                    <NameTooltipAvatarAndIcon
-                        Icon={DateRangeIcon}
-                        tooltipTitle="Filter by date range"
-                        label="Date Range"
-                    />
-
-                    <NameTooltipAvatarAndIcon
-                        Icon={MoreVertIcon}
-                        tooltipTitle="Filter by column header in the table"
-                        label="Filter"
-                    />
-
-                    <NameTooltipAvatarAndIcon
-                        Icon={ArrowUpwardIcon}
-                        tooltipTitle="Sort by column header in the table"
-                        label="Sort"
-                    />
-                </Stack>
             </HeroSection>
 
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "20px",
-                    marginTop: "30px",
-                }}
-            >
+            {/* Tabs for Michelle's and Cathy's texts - Now outside HeroSection */}
+            <Box sx={{ width: "100%", marginTop: 0 }}>
+                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Text Records Tabs">
+                    <Tab label="Michelle's Texts" />
+                    <Tab label="Cathy's Texts" />
+                </Tabs>
+            </Box>
+
+            {/* Date Filter and Button */}
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "20px", marginTop: "30px" }}>
                 <TextField
                     label="Start Date"
                     type="date"
                     value={moment(startDate).format("YYYY-MM-DD")}
-                    onChange={(e: any) =>
-                        dispatch(setStartDate(e.target.value))}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                    onChange={(e: any) => dispatch(setStartDate(e.target.value))}
+                    InputLabelProps={{ shrink: true }}
                     sx={{ mr: "10px" }}
                 />
 
@@ -206,16 +176,16 @@ const TextRecords = () => {
                         size: "large",
                         variant: "contained",
                         marginLeft: "10px",
-                        backgroundColor: "#333", // Dark background
-                        color: "#34D399", // Green text color
+                        backgroundColor: "#333",
+                        color: "#34D399",
                         "&:hover": {
-                            backgroundColor: "#2C9E77", // Darker green background on hover
-                            color: "#ffffff", // White text on hover
+                            backgroundColor: "#2C9E77",
+                            color: "#ffffff",
                         },
                         "&.Mui-disabled": {
-                            color: "#34D399", // Green text on disabled state
-                            backgroundColor: "#555", // Lighter dark background for disabled state
-                            opacity: 0.6, // Reduced opacity on disabled
+                            color: "#34D399",
+                            backgroundColor: "#555",
+                            opacity: 0.6,
                         },
                     }}
                     disabled={loading || parsing || (!startDate && !endDate)}
@@ -230,7 +200,7 @@ const TextRecords = () => {
 
             <Box sx={{ height: "70vh", width: "100%" }}>
                 <DataGrid
-                    rows={filteredTexts}
+                    rows={textsByTab}
                     columns={columns}
                     getRowHeight={() => "auto"}
                     sx={{ width: "100%" }}

@@ -57,7 +57,7 @@ export const getEvidenceDataGridColumns = ({
     {
         field: "description",
         headerName: "Description",
-        width: 700,
+        width: 600,
         renderCell: (params: { value: string }) => (
             <Typography variant="caption">{params.value}</Typography>
         ),
